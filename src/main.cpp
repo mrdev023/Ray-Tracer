@@ -1,12 +1,6 @@
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <cmath>
-#include <limits>
-#include <algorithm>
-using namespace std;
-
 #include "raytracer.h"
+
+using namespace std;
 
  bool init(char* inputName, scene &myScene) 
  {

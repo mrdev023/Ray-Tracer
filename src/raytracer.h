@@ -1,18 +1,53 @@
+#ifndef RAYTRACER_H
+#define RAYTRACER_H
 
-
-struct point {
-	float x, y, z;
-};
-
-istream & operator >> ( istream &inputFile,  point& p ) {
-	return inputFile >> p.x >> p.y >> p.z ; 
-}
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <cmath>
+#include <limits>
+#include <algorithm>
 
 struct vecteur {
 	float x, y, z;
 };
 
-istream & operator >> ( istream &inputFile,  vecteur& v ) {
+struct point {
+	float x, y, z;
+};
+
+struct ray {
+	point start;
+	vecteur dir;
+};
+
+struct material {
+	float red, green, blue, reflection;
+};
+
+struct sphere {
+	point pos;
+	float size;
+	int material;
+};
+
+struct light {
+	point pos;
+	float red, green, blue;
+};
+
+struct scene {
+	std::vector<material> matTab;
+	std::vector<sphere>   sphTab;
+	std::vector<light>    lgtTab;
+	int sizex, sizey;
+};
+
+std::istream & operator >> ( std::istream &inputFile,  point& p ) {
+	return inputFile >> p.x >> p.y >> p.z ; 
+}
+
+std::istream & operator >> ( std::istream &inputFile,  vecteur& v ) {
 	return inputFile >> v.x >> v.y >> v.z ; 
 }
 
@@ -46,38 +81,18 @@ float operator * (const vecteur&v1, const vecteur &v2 ) {
 	return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 }
 
-struct material {
-	float red, green, blue, reflection;
-};
-istream & operator >> ( istream &inputFile, material& mat ) {
+std::istream & operator >> ( std::istream &inputFile, material& mat ) {
 	return inputFile >> mat.red >> mat.green >> mat.blue >> mat.reflection; 
 }
 
-struct sphere {
-	point pos;
-	float size;
-	int material;
-};
-istream & operator >> ( istream &inputFile, sphere& sph ) {
+std::istream & operator >> ( std::istream &inputFile, sphere& sph ) {
 	return inputFile >> sph.pos >> sph.size >> sph.material;
 }
 
-struct light {
-	point pos;
-	float red, green, blue;
-};
-istream & operator >> ( istream &inputFile, light& lig ) {
+std::istream & operator >> ( std::istream &inputFile, light& lig ) {
 	return inputFile >> lig.pos >> lig.red >> lig.green >> lig.blue;
 }
 
-struct ray {
-	point start;
-	vecteur dir;
-};
 
-struct scene {
-	vector<material> matTab;
-	vector<sphere>   sphTab;
-	vector<light>    lgtTab;
-	int sizex, sizey;
-};
+
+#endif
