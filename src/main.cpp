@@ -2,27 +2,6 @@
 
 using namespace std;
 
- bool init(char* inputName, scene &myScene) 
- {
-   int nbMat, nbSphere, nbLight;
-   int i;
-   ifstream sceneFile(inputName);
-   if (!sceneFile)
-     return  false;
-   sceneFile >> myScene.sizex >> myScene.sizey;
-   sceneFile >> nbMat >> nbSphere >> nbLight;
-   myScene.matTab.resize(nbMat); 
-   myScene.sphTab.resize(nbSphere); 
-   myScene.lgtTab.resize(nbLight); 
-   for (i=0; i < nbMat; i++) 
-     sceneFile >> myScene.matTab[i];
-   for (i=0; i < nbSphere; i++) 
-     sceneFile >> myScene.sphTab[i];
-   for (i=0; i < nbLight; i++)
-     sceneFile >> myScene.lgtTab[i];
-   return true;
- } 
-
  bool hitSphere(const ray &r, const sphere &s, float &t) 
  { 
    // intersection rayon/sphere 
@@ -151,10 +130,53 @@ using namespace std;
    return true;
  }
 
+ void addMaterial(scene* s,float r,float g,float b,float reflection){
+   material a;
+   a.red = r;
+   a.green = g;
+   a.blue = b;
+   a.reflection = reflection;
+   s->matTab.push_back(a);
+ }
+
+ void addSphere(scene* s,float x,float y,float z,float size,int material){
+   sphere sb;
+   sb.pos.x = x;
+   sb.pos.y = y;
+   sb.pos.z = z;
+   sb.size = size;
+   sb.material = material;
+   s->sphTab.push_back(sb);
+ }
+
+ void addLight(scene* s,float x,float y,float z,float r,float g,float b){
+   light la;
+   la.pos.x = x;
+   la.pos.y = y;
+   la.pos.z = z;
+   la.red = r;
+   la.green = g;
+   la.blue = b;
+   s->lgtTab.push_back(la);
+ }
+
  int main(int argc, char* argv[]) {
     scene myScene;
-    if (!init("scene.txt", myScene))
-        return -1;
+
+   myScene.sizex = 512;
+   myScene.sizey = 512;
+
+   addMaterial(&myScene,1.0,1.0,0.0,0.5);
+   addMaterial(&myScene,0.0,1.0,1.0,0.5);
+   addMaterial(&myScene,1.0,0.0,1.0,0.5);
+   
+   addSphere(&myScene,233.0,290.0,0.0,100,0);
+   addSphere(&myScene,407.0,290.0,0.0,100,1);
+   addSphere(&myScene,320.0,140.0,0.0,100,2);
+
+   addLight(&myScene,0.0,240.0,-100.0,1.0,1.0,1.0);
+   addLight(&myScene,640.0,240.0,-10000.0,0.6,0.7,1.0);
+
     if (!draw("test.tga", myScene))
         return -1;
     return 0;
